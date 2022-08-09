@@ -7,7 +7,7 @@ const httpsServer = createServer({
   key: process.env.SERVER_KEY,
 });
 const socket = new WebSocket({
-    httpsServer,
+    httpsServer
 });
 
 httpsServer.listen(7071);
