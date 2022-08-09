@@ -1,13 +1,12 @@
 const WebSocket = require("ws").Server;
 const { createServer } = require("https");
-const fs = require("fs");
 
 const httpsServer = createServer({
   cert: process.env.SERVER_CERT,
   key: process.env.SERVER_KEY,
 });
 const socket = new WebSocket({
-    httpsServer
+    server: httpsServer
 });
 
 httpsServer.listen(7071);
