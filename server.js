@@ -9,7 +9,7 @@ const socket = new WebSocket({
     server: httpsServer
 });
 
-httpsServer.listen(process.env.PORT || 7071);
+httpsServer.listen(7071);
 
 const clients = new Map();
 
