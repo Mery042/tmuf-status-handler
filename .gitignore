@@ -1,2 +1,5 @@
 config.json
 node_modules
+csr.pem
+key.pem
+cert.crt

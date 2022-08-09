@@ -1,28 +1,40 @@
-const WebSocket = require('ws');
-const wsserver = new WebSocket.Server({ port: 7071 });
+const WebSocket = require("ws").Server;
+const { createServer } = require("https");
+const fs = require("fs");
+
+const httpsServer = createServer({
+  cert: fs.readFileSync(process.env.SERVER_CERT),
+  key: fs.readFileSync(process.env.SERVER_KEY),
+});
+const socket = new WebSocket({
+    httpsServer,
+});
+
+httpsServer.listen(7071);
+
 const clients = new Map();
 
 let gbxremote = require('gbxremote');
 //const {server_ip, login, password} = require('./config.json');
 const Countdown = require('./countdown.js');
 
-let server = gbxremote.createClient(5000, process.env.server_ip);
+let TMUFserver = gbxremote.createClient(5000, process.env.server_ip);
 
 let playlist = [];
 let currentMapIndex = 0;
 
-server.on('connect', () => {
-	server.query('Authenticate', [process.env.login, process.env.password]);
+TMUFserver.on('connect', () => {
+	TMUFserver.query('Authenticate', [process.env.login, process.env.password]);
     console.log('Successfully established a connection !');
-	server.query('EnableCallbacks', [true]);
+	TMUFserver.query('EnableCallbacks', [true]);
 
-    server.query('GetChallengeList', [42, 0])
+    TMUFserver.query('GetChallengeList', [42, 0])
     .then(list => {
         playlist = list;
     })
     .catch(error => console.log(error));
 
-    server.query('GetCurrentChallengeIndex')
+    TMUFserver.query('GetCurrentChallengeIndex')
     .then(index => {
         currentMapIndex = index;
     })
@@ -31,10 +43,10 @@ server.on('connect', () => {
 });
 
 
-wsserver.on('connection', (ws) => {
+socket.on('connection', (ws) => {
     clients.set(ws);
 
-    server.query('GetCurrentChallengeIndex')
+    TMUFserver.query('GetCurrentChallengeIndex')
     .then(index => {
         currentMapIndex = index;
         let timeLeft  = Countdown.getTotal();
@@ -49,7 +61,7 @@ wsserver.on('connection', (ws) => {
     .catch(error => console.log(error));
 });
 
-wsserver.on('close', (ws) => {
+socket.on('close', (ws) => {
     ws.close();
       
     process.nextTick(() => {
@@ -63,7 +75,7 @@ wsserver.on('close', (ws) => {
 });
 
 // If the server status changed
-server.on('TrackMania.StatusChanged', (params) => {
+TMUFserver.on('TrackMania.StatusChanged', (params) => {
 
     let outbound = '';
     // If the server status changed to Running - Play
@@ -72,7 +84,7 @@ server.on('TrackMania.StatusChanged', (params) => {
         Countdown.start();
         console.log(params);
         // Get the new index of playlist array
-        server.query('GetCurrentChallengeIndex')
+        TMUFserver.query('GetCurrentChallengeIndex')
         .then(index => {
             currentMapIndex = index;
             // Build the message
