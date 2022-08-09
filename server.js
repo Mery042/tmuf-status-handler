@@ -50,6 +50,15 @@ wsserver.on('connection', (ws) => {
 });
 
 wsserver.on('close', (ws) => {
+    ws.close();
+      
+    process.nextTick(() => {
+          if ([ws.OPEN, ws.CLOSING].includes(ws.readyState)) {
+            // Socket still hangs, hard close
+            ws.terminate();
+          }
+    });
+
     clients.delete(ws);
 });
 
