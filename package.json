@@ -1,0 +1,21 @@
+{
+  "name": "kacky-united-schedule",
+  "version": "1.0.0",
+  "description": "Website where you can see the current map being played on the server and the time left until the next map",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "TrackMania"
+  ],
+  "author": "Mery",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.21.0"
+  },
+  "dependencies": {
+    "gbxremote": "^0.2.1",
+    "ws": "^8.8.1"
+  }
+}
