@@ -3,8 +3,8 @@ const { createServer } = require("https");
 const fs = require("fs");
 
 const httpsServer = createServer({
-  cert: fs.readFileSync(process.env.SERVER_CERT),
-  key: fs.readFileSync(process.env.SERVER_KEY),
+  cert: process.env.SERVER_CERT,
+  key: process.env.SERVER_KEY,
 });
 const socket = new WebSocket({
     httpsServer,
