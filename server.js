@@ -45,6 +45,7 @@ TMUFserver.on('connect', () => {
 
 
 socket.on('connection', (ws) => {
+    console.log("The client is connected");
     clients.set(ws);
 
     TMUFserver.query('GetCurrentChallengeIndex')
@@ -63,6 +64,7 @@ socket.on('connection', (ws) => {
 });
 
 socket.on('close', (ws) => {
+    console.log("The client wants to disconnect");
     ws.close();
       
     process.nextTick(() => {
