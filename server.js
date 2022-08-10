@@ -1,19 +1,19 @@
 const WebSocket = require("ws").Server;
 const { createServer } = require("https");
 
+const port = process.env.PORT || 3000;
 const httpsServer = createServer({
   cert: process.env.SERVER_CERT,
   key: process.env.SERVER_KEY,
 });
 
-httpsServer.listen(process.env.PORT || 3000);
+httpsServer.listen(port, () =>
+    console.log('***** exp listening on port: ' + port)
+);
 
 const socket = new WebSocket({
     server: httpsServer
-},
-function() {
-    console.log('***** exp listening on port: ' + process.env.PORT);
-  });
+});
 
 
 const clients = new Map();
