@@ -10,8 +10,10 @@ httpsServer.listen(process.env.PORT || 3000);
 
 const socket = new WebSocket({
     server: httpsServer
-});
-console.log(socket.address().port)
+},
+function() {
+    console.log('***** exp listening on port: ' + process.env.PORT);
+  });
 
 
 const clients = new Map();
