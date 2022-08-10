@@ -2,6 +2,8 @@ const WebSocket = require("ws").Server;
 const { createServer } = require("https");
 
 const port = 443;
+console.log("CERT: "+process.env.SERVER_CERT);
+console.log("KEY: "+process.env.SERVER_KEY);
 const httpsServer = createServer({
   cert: process.env.SERVER_CERT,
   key: process.env.SERVER_KEY,
