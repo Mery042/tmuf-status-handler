@@ -61,21 +61,23 @@ socket.on('connection', (ws) => {
         ws.send(outbound);
     })
     .catch(error => console.log(error));
-});
 
-socket.on('close', (ws) => {
-    console.log("The client wants to disconnect");
-    ws.close();
-      
-    process.nextTick(() => {
-          if ([ws.OPEN, ws.CLOSING].includes(ws.readyState)) {
-            // Socket still hangs, hard close
-            ws.terminate();
-          }
+    ws.on('close', () => {
+        console.log("client disconnected");
+        ws.close();
+          
+        process.nextTick(() => {
+              if ([ws.OPEN, ws.CLOSING].includes(ws.readyState)) {
+                // Socket still hangs, hard close
+                ws.terminate();
+              }
+        });
+    
+        clients.delete(ws);
     });
-
-    clients.delete(ws);
 });
+
+
 
 // If the server status changed
 TMUFserver.on('TrackMania.StatusChanged', (params) => {
