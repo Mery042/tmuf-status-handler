@@ -5,11 +5,13 @@ const httpsServer = createServer({
   cert: process.env.SERVER_CERT,
   key: process.env.SERVER_KEY,
 });
+
+httpsServer.listen(process.env.PORT || 3000);
+
 const socket = new WebSocket({
     server: httpsServer
 });
 
-httpsServer.listen(7071);
 
 const clients = new Map();
 
