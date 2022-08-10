@@ -11,6 +11,7 @@ httpsServer.listen(process.env.PORT || 3000);
 const socket = new WebSocket({
     server: httpsServer
 });
+console.log(socket.address().port)
 
 
 const clients = new Map();
